@@ -37,6 +37,7 @@ jobs:
             - v1-dependencies-
       - run: yarn install
       - run: yarn deploy
+
 workflows:
   version: 2
   build-test-deploy:
