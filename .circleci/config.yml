@@ -48,7 +48,7 @@ jobs:
       - run: yarn install
       - run: yarn backup-database
       ## just for testing
-      - run: curl https://www.webhook.site/2c37e497-98c1-4474-b28b-80fb576a3222?backup=backup-database-ci
+      ## - run: curl https://www.webhook.site/2c37e497-98c1-4474-b28b-80fb576a3222?backup=backup-database-ci
 workflows:
   version: 2
   build-test-deploy:
@@ -63,7 +63,7 @@ workflows:
   backup-productin:
     triggers:
       - schedule:
-          cron: "* * * * *"
+          cron: "*/5 * * * *"
           filters:
             branches:
               only:
