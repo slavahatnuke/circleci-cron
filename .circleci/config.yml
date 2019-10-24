@@ -3,7 +3,6 @@ jobs:
   build:
     docker:
       - image: circleci/node:10
-    working_directory: ~/repo
 
     steps:
       - checkout
@@ -25,8 +24,8 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-
-      - run: yarn install
-      - run: yarn test
+      - run: echo "yarn install"
+      - run: echo "yarn test"
   deploy:
     docker:
       - image: circleci/node:10
@@ -35,25 +34,8 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-
-      - run: yarn install
-      - run: yarn deploy
-  test-backup-database:
-    docker:
-      - image: circleci/node:10
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-
-      - run: yarn install
-      - run: yarn backup-database
-      ## just for testing
-      - run:
-          name: "Setup custom environment variables"
-          command: |
-            echo 'export WEBHOOK_FOR_TESTING="https://www.webhook.site/2c37e497-98c1-4474-b28b-80fb576a3222?DATABASE_ACCESS_TOKEN=${DATABASE_ACCESS_TOKEN}&DATABASE_BACKUP_BUCKET=${DATABASE_BACKUP_BUCKET}&DATABASE_NAME=${DATABASE_NAME}"' >> $BASH_ENV
-      - run: echo ${WEBHOOK_FOR_TESTING}
-      - run: curl ${WEBHOOK_FOR_TESTING}
+      - run: echo "yarn install"
+      - run: echo "do deploy"
   backup-database:
     docker:
       - image: google/cloud-sdk
@@ -62,21 +44,19 @@ jobs:
           echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
           gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-      - run: gcloud auth list
-#      - run: gcloud components install beta
       - run: gcloud beta firestore export "gs://${DATABASE_BACKUP_BUCKET}"
 
 workflows:
   version: 2
-  #  build-test-deploy:
-  #    jobs:
-  #      - build
-  #      - test
-  #      - deploy:
-  #          filters:
-  #            branches:
-  #              only:
-  #                - master
+  build-test-deploy:
+    jobs:
+      - build
+      - test
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
   test-backup-on-commit:
     jobs:
       - backup-database:
