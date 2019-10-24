@@ -63,7 +63,7 @@ jobs:
           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
           gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
       - run: gcloud auth list
-      - run: gcloud components install beta
+#      - run: gcloud components install beta
       - run: gcloud beta firestore export "gs://${DATABASE_BACKUP_BUCKET}"
 
 workflows:
