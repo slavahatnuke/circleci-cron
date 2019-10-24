@@ -70,6 +70,7 @@ workflows:
   test-backup-on-commit:
     jobs:
       - backup-database:
+          context: circleci-cron-prodcution
           filters:
             branches:
               only:
@@ -83,5 +84,6 @@ workflows:
               only:
                 - master
     jobs:
-      - backup-database
+      - backup-database:
+          context: circleci-cron-prodcution
 
