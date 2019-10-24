@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo TESTed"
+    "test": "echo TESTed",
+    "deploy": "echo DEPLOYed"
   },
   "repository": {
     "type": "git",
