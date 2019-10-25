@@ -44,23 +44,23 @@ jobs:
           echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
           gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-      - run: gcloud beta firestore export "gs://${FIRESTORE_BACKUP_BUCKET}/backups"
+      - run: gcloud beta firestore export "gs://${FIRESTORE_BACKUP_BUCKET}/backups/backup-`date +'%Y-%m-%d-%T'`"
 
 workflows:
   version: 2
-  build-test-deploy:
-    jobs:
-      - build
-      - test:
-          requires:
-            - build
-      - deploy:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - master
+#  build-test-deploy:
+#    jobs:
+#      - build
+#      - test:
+#          requires:
+#            - build
+#      - deploy:
+#          requires:
+#            - test
+#          filters:
+#            branches:
+#              only:
+#                - master
   test-backup-on-commit:
     jobs:
       - backup-database:
